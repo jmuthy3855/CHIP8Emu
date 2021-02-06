@@ -1,7 +1,8 @@
 # CHIP8Emu
 Another CHIP8 Emulator.</br>
+The "Hello World" project for anyone interested in emulation development. </br>
 In "working" condition, no UI but can emulate most games.</br>
-Uses SFML for handling graphics, and probably sound later.</br>
+Written in C++ and uses SFML for handling graphics, and probably sound later.</br>
 
 # Resources
 This guide was EXTREMELY helpful: https://tobiasvl.github.io/blog/write-a-chip-8-emulator/ </br>
