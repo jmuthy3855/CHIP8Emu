@@ -26,8 +26,7 @@ int Chip8::loadROM(const char* filename) {
 	// Open the file as a stream of binary and move the file pointer to the end
 	std::ifstream file(filename, std::ios::binary | std::ios::ate);
 
-	if (file.is_open())
-	{
+	if (file.is_open()) {
 		// Get size of file and allocate a buffer to hold the contents
 		//tellg will tell us the position we're currently at, so that's why we move the file pointer to the end of the file to determine the size we need
 		std::streampos size = file.tellg();
@@ -41,10 +40,8 @@ int Chip8::loadROM(const char* filename) {
 		std::cout << "size of file: " << std::dec << size << std::endl;
 
 		// Load the ROM contents into memory starting at 0x200
-		for (long i = 0; i < size; ++i)
-		{
+		for (long i = 0; i < size; ++i) {
 			memory[START_ADDRESS + i] = buffer[i];
-			//std::cout << std::hex << (int)buffer[i] << std::endl;
 		}
 
 		// Free the buffer
@@ -79,7 +76,6 @@ void Chip8::setFont() {
 		memory[i] = font[i - 0x50];
 	}
 
-	//std::cout << "Font has been loaded into memory" << std::endl;
 
 }
 

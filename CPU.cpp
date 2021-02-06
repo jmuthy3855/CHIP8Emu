@@ -7,13 +7,7 @@ unsigned short int fetch(Chip8* state) {
 	combine the 2 bytes into an instruction
 	1. first left shift the first byte by 8
 	2. then bitwise OR with the second byte
-	EX: first byte: 00110011
-	second byte: 11101010
 
-	left shift by 8:
-	00110011 00000000
-	bitwise OR with 11101010:
-	00110011 11101010
 	*/
 	unsigned short int instruction = state->memory[state->PC] << 8 | state->memory[state->PC + 1]; //check this...right shifting by 8 only works assuming memory[PC) treated as 2 bytes
 	state->PC += 2;
@@ -27,6 +21,8 @@ void decodeAndExecute(Chip8* state, unsigned short int instruction) {
 	unsigned int N = instruction & 0x000F; //fourth nibble, 4 bit number
 	unsigned int NN = (Y << 4) | N; //third and fourth nibble, an 8 bit number
 	unsigned int NNN = (X << 8 | Y << 4) | N; //second, third, fourth nibble. 12 bit memory address
+
+	//a better way/more compact way to do this would be to use a function pointer table
 
 	if (opcode == 0x0) {
 		if (NN == 0xE0) {
@@ -159,16 +155,11 @@ void decodeAndExecute(Chip8* state, unsigned short int instruction) {
 void opcode_00E0(Chip8* state) {
 	memset(state->display, 0, sizeof(state->display[0][0]) * DISPLAY_ROWS * DISPLAY_COLS); //clear the display array
 	state->draw_flag = 2;
-	//drawFrame();
-	//window.clear(sf::Color::Black); //clear the actual display
-	//window.display(); //no need to draw points array
 }
 
 //pop from stack
 void opcode_00EE(Chip8* state) {
 	state->PC = state->stack[state->stack_index--]; //could just do stack_index--...
-	//state->PC -= 2;
-	//stack_index--;
 }
 
 //jump to PC given by NNN
@@ -178,15 +169,8 @@ void opcode_1NNN(Chip8* state, unsigned int NNN) {
 
 //call subroutine at NNN, push current PC to stack
 void opcode_2NNN(Chip8* state, unsigned int NNN) {
-	//2NNN call subroutine at NNN, but push current PC to stack
-		//stack_index++; //move stack_index to next free location
-		//printPC();
-		//std::cout << "pushing on to stack " << std::endl;
 	state->stack[++state->stack_index] = state->PC; //push current PC to stack
 	state->PC = NNN; //jump to NNN
-	//printPC();
-	//std::cout << "stack index: " << std::dec << stack_index << std::endl;
-	//printStack();
 }
 
 //skip one 2-byte instruction if VX == NN
@@ -218,7 +202,7 @@ void opcode_6XNN(Chip8* state, unsigned int X, unsigned int NN) {
 //add NN to register X
 void opcode_7XNN(Chip8* state, unsigned int X, unsigned int NN) {
 	//7XNN, add NN to VX
-	state->V[X] = (state->V[X] + NN);// % 256;
+	state->V[X] = (state->V[X] + NN);
 }
 
 //set VX to VY
@@ -317,7 +301,6 @@ void opcode_BNNN(Chip8* state, unsigned int NNN) {
 //random number generator
 void opcode_CXNN(Chip8* state, unsigned int X, unsigned int NN) {
 	unsigned int rdm = (rand() % 255) & NN;
-	//std::cout << "random number: " << std::dec << rdm << std::endl;
 	state->V[X] = rdm;
 }
 
@@ -396,7 +379,6 @@ void opcode_FX18(Chip8* state, unsigned int X) {
 
 //font character
 void opcode_FX29(Chip8* state, unsigned int X) {
-	//std::cout << "Drawing character " << std::hex << (int)state->V[X] << " to the screen" << std::endl;
 	state->index_reg = 0x50 + (5 * state->V[X]);
 }
 
@@ -405,8 +387,6 @@ void opcode_FX33(Chip8* state, unsigned int X) {
 	//storing digits into memory
 	int orig = state->V[X]; //use original value, or could use bit shifting to not use orig?
 	int offset = 2;
-	//std::cout << "val before store: " << std::dec << orig << std::endl;
-	//std::cout << "register used: " << std::dec << X << std::endl;
 
 	while (offset >= 0) { //potential infinite loop here....
 		state->memory[state->index_reg + offset--] = orig % 10;
@@ -418,12 +398,12 @@ void opcode_FX33(Chip8* state, unsigned int X) {
 //wait till any key is pressed
 void opcode_FX0A(Chip8* state, unsigned int X) {
 	int key = -1;
-	//std::cout << "checking for key press" << std::endl;
+
 	//goes through the keys, checking if any of them are pressed(it finds the earliest key that is pressed in the keyboard array)
 	for (int i = 0; i <= 0xF; i++) {
 		if (sf::Keyboard::isKeyPressed(state->keyboardMap[i])) {
 			key = i;
-			break; //this break will break out of the for loop, not the switch case
+			break; 
 		}
 	}
 
@@ -435,6 +415,7 @@ void opcode_FX0A(Chip8* state, unsigned int X) {
 	}
 }
 
+// adds V[X] to index reg, sets overflow flag
 void opcode_FX1E(Chip8* state, unsigned int X) {
 	if (state->V[X] + state->index_reg >= 4096) { //this might be 4095..
 		state->V[15] = 1;
@@ -445,8 +426,6 @@ void opcode_FX1E(Chip8* state, unsigned int X) {
 
 //storing memory(store registers to memory)
 void opcode_FX55(Chip8* state, unsigned int X) {
-	
-			//std::cout << "storing memory, X is " << std::dec << X << std::endl;
 	for (int i = 0; i <= X; i++) {
 		state->memory[state->index_reg + i] = state->V[i];
 	}
@@ -454,8 +433,6 @@ void opcode_FX55(Chip8* state, unsigned int X) {
 
 //loading memory into registers
 void opcode_FX65(Chip8* state, unsigned int X) {
-	
-			//std::cout << "loading memory, X is " << std::dec << X << std::endl;
 	for (int i = 0; i <= X; i++) {
 		state->V[i] = state->memory[state->index_reg + i];
 	}

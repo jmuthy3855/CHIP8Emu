@@ -16,15 +16,11 @@ int main(void) {
 
 	std::cout << "ROM SIZE: " << std::dec << ROM_size << " bytes\n";
 
-	//printFontData(emulator);
-
 	sf::RenderWindow window(sf::VideoMode(DISPLAY_COLS * SCALE_FACTOR, DISPLAY_ROWS * SCALE_FACTOR), "Chip 8 Actual");
 	window.setFramerateLimit(60);
 
 	float cycle_delay = 1.5;
 	auto lastCycleTime = std::chrono::high_resolution_clock::now();
-	//auto lastDelay = std::chrono::high_resolution_clock::now();
-	//auto lastSound = std::chrono::high_resolution_clock::now();
 	float timer_delay = 1000 / 60;
 
 	while (window.isOpen())
@@ -59,10 +55,7 @@ int main(void) {
 			}
 		}
 
-		
-
 	}
-
 
 	delete emulator; //use smart pointer?
 }
