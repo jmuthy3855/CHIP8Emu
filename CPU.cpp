@@ -14,6 +14,9 @@ unsigned short int fetch(Chip8* state) {
 	return instruction;
 }
 
+/* use global variables for opcode, X, Y, etc.
+then switch Chip8* state to be a global variable as well*/
+
 void decodeAndExecute(Chip8* state, unsigned short int instruction) {
 	unsigned int opcode = (instruction & 0xF000) >> 12; //11110000 00000000 will extract the first 4 bits, BUT HAVE TO RIGHT SHIFT...
 	unsigned int X = (instruction & 0x0F00) >> 8; //00001111 00000000 will extract the second 4 bits, first reg 
@@ -24,129 +27,227 @@ void decodeAndExecute(Chip8* state, unsigned short int instruction) {
 
 	//a better way/more compact way to do this would be to use a function pointer table
 
-	if (opcode == 0x0) {
-		if (NN == 0xE0) {
-			opcode_00E0(state);
-		}
-		else {
-			opcode_00EE(state);
-		}
-	}
-	else if (opcode == 0x1) {
-		opcode_1NNN(state, NNN);
-	}
-	else if (opcode == 0x2) {
-		opcode_2NNN(state, NNN);
-	}
-	else if (opcode == 0x3) {
-		opcode_3XNN(state, X, NN);
-	}
-	else if (opcode == 0x4) {
-		opcode_4XNN(state, X, NN);
-	}
-	else if (opcode == 0x5) {
-		opcode_5XY0(state, X, Y);
-	}
-	else if (opcode == 0x6) {
-		opcode_6XNN(state, X, NN);
-	}
-	else if (opcode == 0x7) {
-		opcode_7XNN(state, X, NN);
-	}
-	else if (opcode == 0x8) {
-		if (N == 0x0) {
-			opcode_8XY0(state, X, Y);
-		}
-		else if (N == 0x1) {
-			opcode_8XY1(state, X, Y);
-		}
-		else if (N == 0x2) {
-			opcode_8XY2(state, X, Y);
-		}
-		else if (N == 0x3) {
-			opcode_8XY3(state, X, Y);
-		}
-		else if (N == 0x4) {
-			opcode_8XY4(state, X, Y);
-		}
-		else if (N == 0x5) {
-			opcode_8XY5(state, X, Y);
-		}
-		else if (N == 0x6) {
-			opcode_8XY6(state, X);
-		}
-		else if (N == 0x7) {
-			opcode_8XY7(state, X, Y);
-		}
-		else if (N == 0xE) {
-			opcode_8XYE(state, X);
-		}
-		else {
-			std::cout << "Unknown 8-prefix Opcode: " << std::hex << opcode << std::endl;
-		}
-	}
-	else if (opcode == 0x9) {
-		opcode_9XY0(state, X, Y);
-	}
-	else if (opcode == 0xA) {
-		opcode_ANNN(state, NNN);
-	}
-	else if (opcode == 0xB) {
-		opcode_BNNN(state, NNN);
-	}
-	else if (opcode == 0xC) {
-		opcode_CXNN(state, X, NN);
-	}
-	else if (opcode == 0xD) {
-		opcode_DXYN(state, X, Y, N);
-	}
-	else if (opcode == 0xE) {
-		if (NN == 0x9E) {
-			opcode_EX9E(state, X);
-		}
-		else if (NN == 0xA1) {
-			opcode_EXA1(state, X);
-		}
-		else {
-			std::cout << "Unknown E-prefix Opcode: " << std::hex << opcode << std::endl;
-		}
-	}
-	else if (opcode == 0xF) {
-		if (NN == 0x07) {
-			opcode_FX07(state, X);
-		}
-		else if (NN == 0x15) {
-			opcode_FX15(state, X);
-		}
-		else if (NN == 0x18) {
-			opcode_FX18(state, X);
-		}
-		else if (NN == 0x29) {
-			opcode_FX29(state, X);
-		}
-		else if (NN == 0x33) {
-			opcode_FX33(state, X);
-		}
-		else if (NN == 0x0A) {
-			opcode_FX0A(state, X);
-		}
-		else if (NN == 0x1E) {
-			opcode_FX1E(state, X);
-		}
-		else if (NN == 0x55) {
-			opcode_FX55(state, X);
-		}
-		else if (NN == 0x65) {
-			opcode_FX65(state, X);
-		}
-		else {
-			std::cout << "Unknown F-prefix Opcode: " << std::hex << opcode << std::endl;
-		}
-	}
-	else {
-		std::cout << "Unknown Opcode: " << std::hex << opcode << std::endl;
-	}
+	switch (opcode) {
+		case 0x0: 
+		{
+			switch (NN) {
+				case 0xE0:
+				{
+					opcode_00E0(state);
+					break;
+				}
+				case 0xEE:
+				{
+					opcode_00EE(state);
+					break;
+				}
+				default:
+				{
+					std::cout << "Opcode error with 0x0" << std::endl;
+				}
+			}
 
+			break;
+		}
+		case 0x1:
+		{
+			opcode_1NNN(state, NNN);
+			break;
+		}
+		case 0x2:
+		{
+			opcode_2NNN(state, NNN);
+			break;
+		}
+		case 0x3:
+		{
+			opcode_3XNN(state, X, NN);
+			break;
+		}
+		case 0x4:
+		{
+			opcode_4XNN(state, X, NN);
+			break;
+		}
+		case 0x5:
+		{
+			opcode_5XY0(state, X, Y);
+			break;
+		}
+		case 0x6: 
+		{
+			opcode_6XNN(state, X, NN);
+			break;
+		}
+		case 0x7:
+		{
+			opcode_7XNN(state, X, NN);
+			break;
+		}
+		case 0x8:
+		{
+			switch (N) {
+				case 0x0:
+				{
+					opcode_8XY0(state, X, Y);
+					break;
+				}
+				case 0x1:
+				{
+					opcode_8XY1(state, X, Y);
+					break;
+				}
+				case 0x2:
+				{
+					opcode_8XY2(state, X, Y);
+					break;
+				}
+				case 0x3:
+				{
+					opcode_8XY3(state, X, Y);
+					break;
+				}
+				case 0x4:
+				{
+					opcode_8XY4(state, X, Y);
+					break;
+				}
+				case 0x5:
+				{
+					opcode_8XY5(state, X, Y);
+					break;
+				}
+				case 0x6:
+				{
+					opcode_8XY6(state, X);
+					break;
+				}
+				case 0x7:
+				{
+					opcode_8XY7(state, X, Y);
+					break;
+				}
+				case 0xE:
+				{
+					opcode_8XYE(state, X);
+					break;
+				}
+				default:
+				{
+					std::cout << "Opcode error for 0x8" << std::endl;
+				}
+			}
+
+			break;
+		}
+		case 0x9:
+		{
+			opcode_9XY0(state, X, Y);
+			break;
+		}
+		case 0xA:
+		{
+			opcode_ANNN(state, NNN);
+			break;
+		}
+		case 0xB:
+		{
+			opcode_BNNN(state, NNN);
+			break;
+		}
+		case 0xC:
+		{
+			opcode_CXNN(state, X, NN);
+			break;
+		}
+		case 0xD: 
+		{
+			opcode_DXYN(state, X, Y, N);
+			break;
+		}
+		case 0xE:
+		{
+			switch (NN) {
+				case 0x9E:
+				{
+					opcode_EX9E(state, X);
+					break;
+				}
+				case 0xA1:
+				{
+					opcode_EXA1(state, X);
+					break;
+				}
+				default:
+				{
+					std::cout << "Opcode error 0xE" << std::endl;
+				}
+			}
+
+			break;
+		}
+		case 0xF:
+		{
+			switch (NN) {
+				case 0x07:
+				{
+					opcode_FX07(state, X);
+					break;
+				}
+				case 0x15:
+				{
+					opcode_FX15(state, X);
+					break;
+				}
+				case 0x18:
+				{
+					opcode_FX18(state, X);
+					break;
+				}
+				case 0x29:
+				{
+					opcode_FX29(state, X);
+					break;
+				}
+				case 0x33:
+				{
+					opcode_FX33(state, X);
+					break;
+				}
+				case 0x0A:
+				{
+					opcode_FX0A(state, X);
+					break;
+				}
+				case 0x1E:
+				{
+					opcode_FX1E(state, X);
+					break;
+				}
+				case 0x55:
+				{
+					opcode_FX55(state, X);
+					break;
+				}
+				case 0x65:
+				{
+					opcode_FX65(state, X);
+					break;
+				}
+				default:
+				{
+					std::cout << "Opcode error for 0xF" << std::endl;
+				}
+			}
+		
+			break;
+		}
+		default:
+		{
+			std::cout << "Unknown opcode" << std::endl;
+		}
+	}
+	
 }
 
 /*Chip 8 instructions*/

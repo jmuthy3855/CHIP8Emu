@@ -13,7 +13,7 @@ void drawFrame(unsigned char display[][DISPLAY_COLS], sf::RenderWindow& window, 
 			for (int x = 0; x < DISPLAY_COLS * SCALE_FACTOR; x += SCALE_FACTOR) {
 
 				if (display[y / SCALE_FACTOR][x / SCALE_FACTOR] == 1) {
-					(*rec_ptr).setFillColor(sf::Color::White);
+					(*rec_ptr).setFillColor(sf::Color::Green);
 				}
 				else {
 					(*rec_ptr).setFillColor(sf::Color::Black);
