@@ -1,16 +1,22 @@
 #include "CPU.h"
 #include "Debug.h"
 
-
 /* file scope variables that represent parts of the current instruction being executed */
+static unsigned short int curr_instr; 
 static unsigned int opcode;
 static unsigned int X;
 static unsigned int Y;
 static unsigned int N;
 static unsigned int NN;
 static unsigned int NNN;
+static Chip8* state;
 
-unsigned short int fetch(Chip8* state) {
+/* allows CPU to access chip8 components(register, stack, program counter, etc). only needs to be called once before emulation loop starts */
+void connect_chip8(Chip8* input) {
+	state = input;
+}
+
+unsigned short int fetch() {
 
 	/*
 	combine the 2 bytes into an instruction
@@ -18,21 +24,23 @@ unsigned short int fetch(Chip8* state) {
 	2. then bitwise OR with the second byte
 
 	*/
-	unsigned short int instruction = state->memory[state->PC] << 8 | state->memory[state->PC + 1]; //check this...right shifting by 8 only works assuming memory[PC) treated as 2 bytes
+	curr_instr = state->memory[state->PC] << 8 | state->memory[state->PC + 1]; //check this...right shifting by 8 only works assuming memory[PC) treated as 2 bytes
 	state->PC += 2;
-	return instruction;
+	return curr_instr; // just for convenience if needed later
 }
 
-/* switch Chip8* state to be a global variable as well*/
-
-void decodeAndExecute(Chip8* state, unsigned short int instruction) {
-	opcode = (instruction & 0xF000) >> 12; //11110000 00000000 will extract the first 4 bits, BUT HAVE TO RIGHT SHIFT...
-	X = (instruction & 0x0F00) >> 8; //00001111 00000000 will extract the second 4 bits, first reg 
-	Y = (instruction & 0x00F0) >> 4; //0000 0000 1111 0000 you get the idea....third nibble, second reg
-	N = instruction & 0x000F; //fourth nibble, 4 bit number
+/* extract parts of the instruction */
+void decode() {
+	opcode = (curr_instr & 0xF000) >> 12; //11110000 00000000 will extract the first 4 bits, BUT HAVE TO RIGHT SHIFT...
+	X = (curr_instr & 0x0F00) >> 8; //00001111 00000000 will extract the second 4 bits, first reg 
+	Y = (curr_instr & 0x00F0) >> 4; //0000 0000 1111 0000 you get the idea....third nibble, second reg
+	N = curr_instr & 0x000F; //fourth nibble, 4 bit number
 	NN = (Y << 4) | N; //third and fourth nibble, an 8 bit number
 	NNN = (X << 8 | Y << 4) | N; //second, third, fourth nibble. 12 bit memory address
+}
 
+/* execute the current instruction, based off the file scope variable values */
+void execute() {
 	//a better way/more compact way to do this would be to use a function pointer table
 
 	switch (opcode) {

@@ -32,7 +32,7 @@ public:
 	void setKeyboardMap(); //set keyboard mapping
 	int loadROM(const char* filename); //load ROM into memory
 	void setFont(); //sets font and loads it into memory
-	void emulateCPUCycle(Chip8* state); //emulates 1 chip 8 cycle
+	void emulateCPUCycle(); //emulates 1 chip 8 cycle
 
 	Chip8() {
 		//initialize various array variables
@@ -52,10 +52,6 @@ public:
 		//set keyboard mapping and font
 		setKeyboardMap();
 		setFont();
-
-		
-
-		
 	}
 
 };

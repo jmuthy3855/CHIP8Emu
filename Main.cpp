@@ -10,9 +10,11 @@
 
 int main(void) {
 	Chip8* emulator = new Chip8(); //why can't i do Chip8 *emulator()?
-	int ROM_size = emulator->Chip8::loadROM("Trip8.ch8"); //should be a cmd line arg or part of UI
+	int ROM_size = emulator->Chip8::loadROM("C:\\Users\\jeymu\\Desktop\\CHIP8TestROMs\\Pong.ch8"); //should be a cmd line arg or part of UI
 	int instruction_count = 0;
 	srand(time(NULL)); //initialize seed for RNG
+
+	connect_chip8(emulator); //allows CPU to access chip 8 state
 
 	std::cout << "ROM SIZE: " << std::dec << ROM_size << " bytes\n";
 
@@ -38,7 +40,7 @@ int main(void) {
 		if (dt > cycle_delay) {
 			lastCycleTime = currentTime;
 
-			emulator->emulateCPUCycle(emulator);
+			emulator->emulateCPUCycle();
 			instruction_count++;
 
 			if (instruction_count % 8 == 0 && emulator->delay_timer > 0) {

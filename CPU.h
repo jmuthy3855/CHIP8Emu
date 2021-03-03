@@ -1,8 +1,11 @@
 #pragma once
 #include "Chip8.h"
 
-unsigned short int fetch(Chip8* state); //fetch the instruction at the current PC
-void decodeAndExecute(Chip8* state, unsigned short int instruction); //decode and execute the instruction arg
+void connect_chip8(Chip8* input_state); //"connects" the CPU to the main Chip8 object/state via a pointer
+
+unsigned short int fetch(); //fetch the instruction at the current PC
+void decode(); // decode instruction(extract opcode, regs, etc.)
+void execute(); //execute the current instruction
 
 void opcode_00E0(Chip8* state);
 void opcode_00EE(Chip8* state);

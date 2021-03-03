@@ -79,7 +79,9 @@ void Chip8::setFont() {
 
 }
 
-void Chip8::emulateCPUCycle(Chip8* state) {
-	unsigned short int instr = fetch(state);
-	decodeAndExecute(state, instr);
+/* the fetch decode execute emulation structure. emulates 1 CPU cycle */
+void Chip8::emulateCPUCycle() {
+	fetch();
+	decode();
+	execute();
 }
