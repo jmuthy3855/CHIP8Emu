@@ -9,7 +9,7 @@
 
 #define DISPLAY_ROWS 32
 #define DISPLAY_COLS 64
-#define SCALE_FACTOR 20
+#define SCALE_FACTOR 30
 #define START_ADDRESS 0x200
 
 class Chip8 {

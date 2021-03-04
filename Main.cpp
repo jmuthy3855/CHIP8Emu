@@ -23,7 +23,6 @@ int main(void) {
 
 	float cycle_delay = 1.5;
 	auto lastCycleTime = std::chrono::high_resolution_clock::now();
-	float timer_delay = 1000 / 60;
 
 	while (window.isOpen())
 	{
@@ -50,12 +49,13 @@ int main(void) {
 			if (instruction_count % 8 == 0 && emulator->sound_timer > 0) {
 				--emulator->sound_timer;
 			}
-
+			
 			if (emulator->draw_flag >= 1) {
 				drawFrame(emulator->display, window, emulator->draw_flag);
 				emulator->draw_flag = 0;
 			}
 		}
+		
 
 	}
 

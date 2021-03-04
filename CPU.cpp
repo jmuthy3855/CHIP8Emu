@@ -49,12 +49,12 @@ void execute() {
 			switch (NN) {
 				case 0xE0:
 				{
-					opcode_00E0(state);
+					opcode_00E0();
 					break;
 				}
 				case 0xEE:
 				{
-					opcode_00EE(state);
+					opcode_00EE();
 					break;
 				}
 				default:
@@ -67,37 +67,37 @@ void execute() {
 		}
 		case 0x1:
 		{
-			opcode_1NNN(state);
+			opcode_1NNN();
 			break;
 		}
 		case 0x2:
 		{
-			opcode_2NNN(state);
+			opcode_2NNN();
 			break;
 		}
 		case 0x3:
 		{
-			opcode_3XNN(state);
+			opcode_3XNN();
 			break;
 		}
 		case 0x4:
 		{
-			opcode_4XNN(state);
+			opcode_4XNN();
 			break;
 		}
 		case 0x5:
 		{
-			opcode_5XY0(state);
+			opcode_5XY0();
 			break;
 		}
 		case 0x6: 
 		{
-			opcode_6XNN(state);
+			opcode_6XNN();
 			break;
 		}
 		case 0x7:
 		{
-			opcode_7XNN(state);
+			opcode_7XNN();
 			break;
 		}
 		case 0x8:
@@ -105,47 +105,47 @@ void execute() {
 			switch (N) {
 				case 0x0:
 				{
-					opcode_8XY0(state);
+					opcode_8XY0();
 					break;
 				}
 				case 0x1:
 				{
-					opcode_8XY1(state);
+					opcode_8XY1();
 					break;
 				}
 				case 0x2:
 				{
-					opcode_8XY2(state);
+					opcode_8XY2();
 					break;
 				}
 				case 0x3:
 				{
-					opcode_8XY3(state);
+					opcode_8XY3();
 					break;
 				}
 				case 0x4:
 				{
-					opcode_8XY4(state);
+					opcode_8XY4();
 					break;
 				}
 				case 0x5:
 				{
-					opcode_8XY5(state);
+					opcode_8XY5();
 					break;
 				}
 				case 0x6:
 				{
-					opcode_8XY6(state);
+					opcode_8XY6();
 					break;
 				}
 				case 0x7:
 				{
-					opcode_8XY7(state);
+					opcode_8XY7();
 					break;
 				}
 				case 0xE:
 				{
-					opcode_8XYE(state);
+					opcode_8XYE();
 					break;
 				}
 				default:
@@ -158,27 +158,27 @@ void execute() {
 		}
 		case 0x9:
 		{
-			opcode_9XY0(state);
+			opcode_9XY0();
 			break;
 		}
 		case 0xA:
 		{
-			opcode_ANNN(state);
+			opcode_ANNN();
 			break;
 		}
 		case 0xB:
 		{
-			opcode_BNNN(state);
+			opcode_BNNN();
 			break;
 		}
 		case 0xC:
 		{
-			opcode_CXNN(state);
+			opcode_CXNN();
 			break;
 		}
 		case 0xD: 
 		{
-			opcode_DXYN(state);
+			opcode_DXYN();
 			break;
 		}
 		case 0xE:
@@ -186,12 +186,12 @@ void execute() {
 			switch (NN) {
 				case 0x9E:
 				{
-					opcode_EX9E(state);
+					opcode_EX9E();
 					break;
 				}
 				case 0xA1:
 				{
-					opcode_EXA1(state);
+					opcode_EXA1();
 					break;
 				}
 				default:
@@ -207,47 +207,47 @@ void execute() {
 			switch (NN) {
 				case 0x07:
 				{
-					opcode_FX07(state);
+					opcode_FX07();
 					break;
 				}
 				case 0x15:
 				{
-					opcode_FX15(state);
+					opcode_FX15();
 					break;
 				}
 				case 0x18:
 				{
-					opcode_FX18(state);
+					opcode_FX18();
 					break;
 				}
 				case 0x29:
 				{
-					opcode_FX29(state);
+					opcode_FX29();
 					break;
 				}
 				case 0x33:
 				{
-					opcode_FX33(state);
+					opcode_FX33();
 					break;
 				}
 				case 0x0A:
 				{
-					opcode_FX0A(state);
+					opcode_FX0A();
 					break;
 				}
 				case 0x1E:
 				{
-					opcode_FX1E(state);
+					opcode_FX1E();
 					break;
 				}
 				case 0x55:
 				{
-					opcode_FX55(state);
+					opcode_FX55();
 					break;
 				}
 				case 0x65:
 				{
-					opcode_FX65(state);
+					opcode_FX65();
 					break;
 				}
 				default:
@@ -269,81 +269,81 @@ void execute() {
 /*Chip 8 instructions*/
 
 //clear the screen
-void opcode_00E0(Chip8* state) {
+void opcode_00E0() {
 	memset(state->display, 0, sizeof(state->display[0][0]) * DISPLAY_ROWS * DISPLAY_COLS); //clear the display array
 	state->draw_flag = 2;
 }
 
 //pop from stack
-void opcode_00EE(Chip8* state) {
+void opcode_00EE() {
 	state->PC = state->stack[state->stack_index--]; //could just do stack_index--...
 }
 
 //jump to PC given by NNN
-void opcode_1NNN(Chip8* state) {
+void opcode_1NNN() {
 	state->PC = NNN;
 }
 
 //call subroutine at NNN, push current PC to stack
-void opcode_2NNN(Chip8* state) {
+void opcode_2NNN() {
 	state->stack[++state->stack_index] = state->PC; //push current PC to stack
 	state->PC = NNN; //jump to NNN
 }
 
 //skip one 2-byte instruction if VX == NN
-void opcode_3XNN(Chip8* state) {
+void opcode_3XNN() {
 	if (state->V[X] == NN) {
 		state->PC += 2;
 	}
 }
 
 //skip one 2-byte instruction if VX != NN
-void opcode_4XNN(Chip8* state) {
+void opcode_4XNN() {
 	if (state->V[X] != NN) {
 		state->PC += 2;
 	}
 }
 
 //skip one 2-byte instruction if VX == VY
-void opcode_5XY0(Chip8* state) {
+void opcode_5XY0() {
 	if (state->V[X] == state->V[Y]) {
 		state->PC += 2;
 	}
 }
 
 //set register X to NN
-void opcode_6XNN(Chip8* state) {
+void opcode_6XNN() {
 	state->V[X] = NN;
 }
 
 //add NN to register X
-void opcode_7XNN(Chip8* state) {
+void opcode_7XNN() {
 	//7XNN, add NN to VX
 	state->V[X] = (state->V[X] + NN);
 }
 
 //set VX to VY
-void opcode_8XY0(Chip8* state) {
+void opcode_8XY0() {
 	state->V[X] = state->V[Y];
 }
 
 //bitwise logical AND of VX and VY, stored in VX
-void opcode_8XY1(Chip8* state) {
+void opcode_8XY1() {
 	state->V[X] = state->V[X] | state->V[Y];
 }
 
 //bitwise logical AND of VX and VY, stored in VX
-void opcode_8XY2(Chip8* state) {
+void opcode_8XY2() {
 	state->V[X] = state->V[X] & state->V[Y];
 }
 
 //bitwise XOR of VX and VY, stored in VX
-void opcode_8XY3(Chip8* state) {
+void opcode_8XY3() {
 	state->V[X] = state->V[X] ^ state->V[Y];
 }
 
 //add NN to register X(same as 7XNN), but carry flag is affected
-void opcode_8XY4(Chip8* state) {
+void opcode_8XY4() {
 	int x = state->V[X]; //store in integers, because if result overflows it's not very easy to tell
 	int y = state->V[Y];
 	state->V[X] = state->V[X] + state->V[Y];
@@ -358,7 +358,7 @@ void opcode_8XY4(Chip8* state) {
 }
 
 //store VX-VY in VX, carry flag is set in both cases
-void opcode_8XY5(Chip8* state) {
+void opcode_8XY5() {
 	if (state->V[X] > state->V[Y]) {
 		state->V[15] = 1;
 	}
@@ -370,7 +370,7 @@ void opcode_8XY5(Chip8* state) {
 }
 
 //shift to the right by 1 bit
-void opcode_8XY6(Chip8* state) {
+void opcode_8XY6() {
 	int bit = state->V[X] & 1; //get LSB
 	state->V[X] = state->V[X] >> 1;
 
@@ -378,7 +378,7 @@ void opcode_8XY6(Chip8* state) {
 }
 
 //store VY-VX in VX, carry flag is set in both cases
-void opcode_8XY7(Chip8* state) {
+void opcode_8XY7() {
 	if (state->V[Y] > state->V[X]) {
 		state->V[15] = 1;
 	}
@@ -390,7 +390,7 @@ void opcode_8XY7(Chip8* state) {
 }
 
 //left shift by 1 bit
-void opcode_8XYE(Chip8* state) {
+void opcode_8XYE() {
 	unsigned char bit = (state->V[X] & (1 << 7)) >> 7; //get MSB
 
 	state->V[X] = state->V[X] << 1;
@@ -398,7 +398,7 @@ void opcode_8XYE(Chip8* state) {
 }
 
 // skip instruction if VX != VY
-void opcode_9XY0(Chip8* state) {
+void opcode_9XY0() {
 	if (state->V[X] != state->V[Y]) {
 		state->PC += 2;
 	}
@@ -406,24 +406,24 @@ void opcode_9XY0(Chip8* state) {
 
 
 //set index register to NNN
-void opcode_ANNN(Chip8* state) {
+void opcode_ANNN() {
 	state->index_reg = NNN;
 }
 
 //jump with offset
-void opcode_BNNN(Chip8* state) {
+void opcode_BNNN() {
 	state->PC = NNN + state->V[0];
 }
 
 //random number generator
-void opcode_CXNN(Chip8* state) {
+void opcode_CXNN() {
 	unsigned int rdm = (rand() % 255) & NN;
 	state->V[X] = rdm;
 }
 
 
 //draw sprite to screen
-void opcode_DXYN(Chip8* state) {
+void opcode_DXYN() {
 	//DXYN, draw to the screen. REMEMBER, Y -> ROWS(VERTICAL), X -> COLS(HORIZONTAL)
 	state->draw_flag = 1;
 	unsigned int x_coord = state->V[X] % DISPLAY_COLS; //handle "wrapping" of pixels if going out of bounds
@@ -466,41 +466,41 @@ void opcode_DXYN(Chip8* state) {
 }
 
 //skip instruction if value in VX is pressed
-void opcode_EX9E(Chip8* state) {
+void opcode_EX9E() {
 	if (sf::Keyboard::isKeyPressed(state->keyboardMap[state->V[X]])) {
 		state->PC += 2; //skip instruction 
 	}
 }
 
 //skip instruction if value in VX is NOT pressed
-void opcode_EXA1(Chip8* state) {
+void opcode_EXA1() {
 	if (!sf::Keyboard::isKeyPressed(state->keyboardMap[state->V[X]])) {
 		state->PC += 2; //skip instruction 
 	}
 }
 
 //set VX to delay_timer
-void opcode_FX07(Chip8* state) {
+void opcode_FX07() {
 	state->V[X] = state->delay_timer;
 }
 
 //set delay timer to value in VX
-void opcode_FX15(Chip8* state) {
+void opcode_FX15() {
 	state->delay_timer = state->V[X];
 }
 
 //set sound timer to value in VX
-void opcode_FX18(Chip8* state) {
+void opcode_FX18() {
 	state->sound_timer = state->V[X];
 }
 
 //font character
-void opcode_FX29(Chip8* state) {
+void opcode_FX29() {
 	state->index_reg = 0x50 + (5 * state->V[X]);
 }
 
 //store digits into memory
-void opcode_FX33(Chip8* state) {
+void opcode_FX33() {
 	//storing digits into memory
 	int orig = state->V[X]; //use original value, or could use bit shifting to not use orig?
 	int offset = 2;
@@ -513,7 +513,7 @@ void opcode_FX33(Chip8* state) {
 }
 
 //wait till any key is pressed
-void opcode_FX0A(Chip8* state) {
+void opcode_FX0A() {
 	int key = -1;
 
 	//goes through the keys, checking if any of them are pressed(it finds the earliest key that is pressed in the keyboard array)
@@ -533,7 +533,7 @@ void opcode_FX0A(Chip8* state) {
 }
 
 // adds V[X] to index reg, sets overflow flag
-void opcode_FX1E(Chip8* state) {
+void opcode_FX1E() {
 	if (state->V[X] + state->index_reg >= 4096) { //this might be 4095..
 		state->V[15] = 1;
 	}
@@ -542,14 +542,14 @@ void opcode_FX1E(Chip8* state) {
 }
 
 //storing memory(store registers to memory)
-void opcode_FX55(Chip8* state) {
+void opcode_FX55() {
 	for (int i = 0; i <= X; i++) {
 		state->memory[state->index_reg + i] = state->V[i];
 	}
 }
 
 //loading memory into registers
-void opcode_FX65(Chip8* state) {
+void opcode_FX65() {
 	for (int i = 0; i <= X; i++) {
 		state->V[i] = state->memory[state->index_reg + i];
 	}
