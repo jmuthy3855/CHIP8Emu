@@ -1,6 +1,7 @@
 #pragma once
 #include "Chip8.h"
 
+void print_indices();
 void printFontData(Chip8* state);
 void printDisplay(Chip8* state);
 void printMemory(Chip8* state, int size);

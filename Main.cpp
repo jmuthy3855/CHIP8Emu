@@ -15,6 +15,8 @@ int main(void) {
 	srand(time(NULL)); //initialize seed for RNG
 
 	connect_chip8(emulator); //allows CPU to access chip 8 state
+	load_instruction_table();
+	print_indices();
 
 	std::cout << "ROM SIZE: " << std::dec << ROM_size << " bytes\n";
 

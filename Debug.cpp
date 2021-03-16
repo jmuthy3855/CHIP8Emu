@@ -50,3 +50,17 @@ void printStack(Chip8* state) {
 		std::cout << "index " << std::dec << i << ": " << std::hex << state->stack[i] << std::endl;
 	}
 }
+
+/* prints instruction table indices */
+void print_indices() {
+	
+	unsigned int indices_8[] = { 0x07, 0x0A, 0x15, 0x18, 0x1E, 0x29, 0x33, 0x55, 0x65 };
+	//(indices_8[i] % 9) + 3 * ((indices_8[i] & (1 << 3)) >> 3)
+	//0.0791789x + 0.744868
+
+	for (int i = 0; i < 9; i++) {
+		std::cout << "hex: " << std::hex << indices_8[i] << std::endl;
+		std::cout << std::dec << (indices_8[i] & 0x55) % 9 << std::endl;
+	}
+
+}
