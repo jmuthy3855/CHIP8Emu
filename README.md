@@ -1,5 +1,5 @@
 # CHIP8Emu
-Another CHIP8 Emulator.</br>
+Another CHIP8 Emulator(or interpreter...or VM).</br>
 The "Hello World" project for anyone interested in emulation development. </br>
 In "working" condition, no UI but can emulate most games.</br>
 Written in C++ and uses SFML for handling graphics, and probably sound later.</br>
