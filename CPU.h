@@ -1,10 +1,6 @@
 #pragma once
 #include "Chip8.h"
 
-typedef void(*Instruction)(); //function pointer
-
-void load_instruction_table(); //loads function pointer table
-
 void connect_chip8(Chip8* input_state); //"connects" the CPU to the main Chip8 object/state via a pointer
 
 unsigned short int fetch(); //fetch the instruction at the current PC

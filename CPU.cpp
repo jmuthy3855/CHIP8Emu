@@ -10,38 +10,7 @@ static unsigned int N;
 static unsigned int NN;
 static unsigned int NNN;
 static Chip8* state;
-static Instruction opcode_zero[2];
-static Instruction opcode_eight[9];
-static Instruction opcode_EX[2];
-static Instruction opcode_FX[9];
 
-void load_instruction_table() {
-	opcode_zero[0] = &opcode_00E0;
-	opcode_zero[1] = &opcode_00EE;
-
-	opcode_eight[0] = &opcode_8XY0;
-	opcode_eight[1] = &opcode_8XY1;
-	opcode_eight[2] = &opcode_8XY2;
-	opcode_eight[3] = &opcode_8XY3;
-	opcode_eight[4] = &opcode_8XY4;
-	opcode_eight[5] = &opcode_8XY5;
-	opcode_eight[6] = &opcode_8XY6;
-	opcode_eight[7] = &opcode_8XY7;
-	opcode_eight[8] = &opcode_8XYE;
-
-	opcode_EX[0] = &opcode_EX9E;
-	opcode_EX[1] = &opcode_EXA1;
-
-	opcode_FX[0] = &opcode_FX0A;
-	opcode_FX[1] = &opcode_FX29;
-	opcode_FX[2] = &opcode_FX1E;
-	opcode_FX[3] = &opcode_FX15;
-	opcode_FX[4] = &opcode_FX55;
-	opcode_FX[5] = &opcode_FX07;
-	opcode_FX[6] = &opcode_FX65;
-	opcode_FX[7] = &opcode_FX18;
-	opcode_FX[8] = &opcode_FX33;
-}
 
 /* allows CPU to access chip8 components(register, stack, program counter, etc). only needs to be called once before emulation loop starts */
 void connect_chip8(Chip8* input) {
@@ -79,7 +48,7 @@ void execute() {
 		case 0x0: 
 		{
 			//std::cout << ((N & 2) >> 1) << std::endl;
-			/*
+			
 			switch (NN) {
 				case 0xE0:
 				{
@@ -96,10 +65,8 @@ void execute() {
 					std::cout << "Opcode error with 0x0" << std::endl;
 				}
 			}
-			*/
 			
-
-			opcode_zero[(N & 2) >> 1]();
+			
 			break;
 		}
 		case 0x1:
@@ -139,7 +106,7 @@ void execute() {
 		}
 		case 0x8:
 		{
-			/*
+			
 			switch (N) {
 
 				case 0x0:
@@ -192,10 +159,9 @@ void execute() {
 					std::cout << "Opcode error for 0x8" << std::endl;
 				}
 			}
-			*/
+			
 			//std::cout << (N % 9) + 3 * (N & (1 << 3)) << std::endl;
 
-			opcode_eight[(N % 9) + 3 * ((N & (1 << 3)) >> 3)]();
 			break;
 		}
 		case 0x9:
@@ -226,7 +192,7 @@ void execute() {
 		case 0xE:
 		{
 
-			/*
+			
 			switch (NN) {
 				case 0x9E:
 				{
@@ -243,14 +209,12 @@ void execute() {
 					std::cout << "Opcode error 0xE" << std::endl;
 				}
 			}
-			*/
-
-			opcode_EX[N & 1]();
+			
 			break;
 		}
 		case 0xF:
 		{
-			/* 
+			 
 			switch (NN) {
 				case 0x07:
 				{
@@ -302,11 +266,7 @@ void execute() {
 					std::cout << "Opcode error for 0xF" << std::endl;
 				}
 			}
-			*/
 			
-			//i found this 0-8 mapping via magic
-			//well sort of. 0x55 skips every other bit position. NN & 0x55 gives some unique numbers, but it's really just coincidence that modding 9 after that gives the 0-8 mapping. 
-			opcode_FX[(NN & 0x55) % 9]();
 			break;
 		}
 		default:
